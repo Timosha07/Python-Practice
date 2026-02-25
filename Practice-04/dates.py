@@ -1,23 +1,22 @@
-import datetime
+from datetime import datetime, timedelta
+x = datetime.now()
+variable = x - timedelta(days=5)
+print(variable)
+#2
+yesterday = x - timedelta(days=1)
+print(yesterday)
 
-x = datetime.datetime.now()
-print(x)
+tomorrow = x + timedelta(days=1)
+print(tomorrow)
+#3
+without_microseconds = x.replace(microsecond=0)
+print(without_microseconds)
+#4
+date1 = datetime(2026, 2, 26, 10, 0, 0)
+date2 = datetime(2026, 2, 25, 8, 30, 0)
 
-import datetime
+difference = date1 - date2
 
-x = datetime.datetime.now()
+seconds = difference.total_seconds()
 
-print(x.year)
-print(x.strftime("%A"))
-
-import datetime
-
-x = datetime.datetime(2020, 5, 17)
-
-print(x)
-
-import datetime
-
-x = datetime.datetime(2018, 6, 1)
-
-print(x.strftime("%B"))
+print("Difference in seconds:", seconds)

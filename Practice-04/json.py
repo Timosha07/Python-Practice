@@ -1,52 +1,21 @@
 import json
 
-# some JSON:
-x =  '{ "name":"John", "age":30, "city":"New York"}'
+# Открываем файл
+with open("sample-data (1).json") as file:
+    data = json.load(file)
 
-# parse x:
-y = json.loads(x)
+print("Interface Status")
+print("=" * 80)
+print(f"{'DN':50} {'Description':15} {'Speed':10} {'MTU'}")
+print("-" * 80)
 
-# the result is a Python dictionary:
-print(y["age"])
+# Проходим по списку imdata
+for item in data["imdata"]:
+    attributes = item["l1PhysIf"]["attributes"]
 
-import json
+    dn = attributes["dn"]
+    descr = attributes["descr"]
+    speed = attributes["speed"]
+    mtu = attributes["mtu"]
 
-# a Python object (dict):
-x = {
-  "name": "John",
-  "age": 30,
-  "city": "New York"
-}
-
-# convert into JSON:
-y = json.dumps(x)
-
-# the result is a JSON string:
-print(y)
-
-print(json.dumps({"name": "John", "age": 30}))
-print(json.dumps(["apple", "bananas"]))
-print(json.dumps(("apple", "bananas")))
-print(json.dumps("hello"))
-print(json.dumps(42))
-print(json.dumps(31.76))
-print(json.dumps(True))
-print(json.dumps(False))
-print(json.dumps(None))
-
-import json
-
-x = {
-  "name": "John",
-  "age": 30,
-  "married": True,
-  "divorced": False,
-  "children": ("Ann","Billy"),
-  "pets": None,
-  "cars": [
-    {"model": "BMW 230", "mpg": 27.5},
-    {"model": "Ford Edge", "mpg": 24.1}
-  ]
-}
-
-print(json.dumps(x))
+    print(f"{dn:50} {descr:15} {speed:10} {mtu}")
