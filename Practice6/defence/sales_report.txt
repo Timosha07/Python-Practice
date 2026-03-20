@@ -1,0 +1,7 @@
+Total records: 6
+Average sold: 4.2
+Highest sold: 10
+Lowestt sold: 1
+
+very popular products:
+Mouse 10
