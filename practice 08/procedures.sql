@@ -1,37 +1,41 @@
-
-CREATE OR REPLACE PROCEDURE upsert_contact(p_name VARCHAR, p_phone VARCHAR)
-AS $$
+-- Upsert
+CREATE OR REPLACE PROCEDURE upsert_user(p_name TEXT, p_phone TEXT)
+LANGUAGE plpgsql AS $$
 BEGIN
-    INSERT INTO phonebook (name, number) 
+    INSERT INTO phonebook (name, phone) 
     VALUES (p_name, p_phone)
-    ON CONFLICT (name) DO UPDATE 
-    SET number = EXCLUDED.number;
+    ON CONFLICT (name) 
+    DO UPDATE SET phone = EXCLUDED.phone;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
+--  Массовая вставка
 
-CREATE OR REPLACE PROCEDURE insert_many_contacts(p_names VARCHAR[], p_phones VARCHAR[])
-AS $$
+CREATE OR REPLACE FUNCTION batch_insert_users(p_names TEXT[], p_phones TEXT[])
+RETURNS TABLE(failed_name TEXT, failed_phone TEXT) AS $$
 DECLARE
     i INT;
 BEGIN
-    FOR i IN 1 .. array_upper(p_names, 1) LOOP
-
-        IF length(p_phones[i]) >= 5 THEN
-            INSERT INTO phonebook (name, number) VALUES (p_names[i], p_phones[i])
+    FOR i IN 1..array_length(p_names, 1) LOOP
+        
+        IF p_phones[i] ~ '^[0-9]+$' AND length(p_phones[i]) > 5 THEN
+            INSERT INTO phonebook (name, phone) 
+            VALUES (p_names[i], p_phones[i])
             ON CONFLICT (name) DO NOTHING;
         ELSE
-            RAISE NOTICE 'Invalid phone for user %: %', p_names[i], p_phones[i];
+            failed_name := p_names[i];
+            failed_phone := p_phones[i];
+            RETURN NEXT;
         END IF;
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
--- 5. Удаление по имени или номеру
-CREATE OR REPLACE PROCEDURE delete_contact(p_target VARCHAR)
-AS $$
+-- Удаление 
+CREATE OR REPLACE PROCEDURE delete_record(p_target TEXT)
+LANGUAGE plpgsql AS $$
 BEGIN
     DELETE FROM phonebook 
-    WHERE name = p_target OR number = p_target;
+    WHERE name = p_target OR phone = p_target;
 END;
-$$ LANGUAGE plpgsql;
+$$;

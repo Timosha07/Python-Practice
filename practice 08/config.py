@@ -1,7 +1,8 @@
 # config.py
-params = {
+DB_PARAMS = {
     "host": "localhost",
-    "database": "postgres",
+    "database": "phonebook8",
     "user": "postgres",
-    "password": "Timka12345*" 
+    "password": "Timka12345*",
+    "port": "5432"
 }
